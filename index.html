@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: Helvetica, Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .comparison-slider {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .before-image,
+    .after-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .before-image {
+      z-index: 1;
+      background-image: url('https://i.imgur.com/TUhK6Aq.jpeg');
+      clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+    }
+
+    .after-image {
+      background-image: url('https://i.imgur.com/l89vnYu.jpeg');
+    }
+
+    .slider {
+      position: absolute;
+      width: 3px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      cursor: ew-resize;
+    }
+
+    .slider-handle {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      cursor: ew-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .slider-arrows {
+      width: 20px;
+      height: 20px;
+      background-image: url('/api/placeholder/40/40');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      transform: rotate(-90deg);
+    }
+
+    .context-box {
+      margin: 24px 0;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .context-content {
+      margin: 0;
+      line-height: 1.7;
+      color: #333;
+      font-size: 1.05em;
+    }
+
+    .instructions {
+      text-align: center;
+      margin: 24px 0;
+      padding: 16px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .nav-button {
+      flex: 1;
+      padding: 14px 24px;
+      background: #005AAF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-button:hover {
+      background: #004488;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .comparison-slider {
+        height: 300px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .context-box {
+        font-size: 0.9em;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Before & After: The Big Dig</h1>
+    
+    <div class="comparison-slider">
+      <div class="before-image"></div>
+      <div class="after-image"></div>
+      <div class="slider">
+        <div class="slider-handle">
+          <div class="slider-arrows"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="context-box">
+      <p id="beforeContext" class="context-content">
+        Before the Big Dig, Boston's elevated Central Artery dominated the cityscape, casting long shadows over the streets below. This hulking green structure, visible in the image, carried over 190,000 vehicles daily through downtown Boston, creating a concrete barrier between the city and its historic waterfront. The six-lane highway, built in the 1950s, was a testament to mid-century urban planning that prioritized automobiles over pedestrian spaces and urban connectivity. Notice the congested traffic and the imposing structure that effectively divided the city, creating a stark urban barrier that contributed to the area's economic stagnation.
+      </p>
+      <p id="afterContext" class="context-content" style="display: none;">
+        After the Big Dig's completion, the transformation is striking. The elevated highway has been replaced by the Rose Kennedy Greenway, a 1.5-mile ribbon of parks and public spaces seen here with its carefully landscaped gardens, tree-lined pathways, and open green spaces. The iconic Leonard P. Zakim Bridge, visible in the background, has become a new symbol of modern Boston. The area now features pedestrian-friendly spaces, public art installations, and seasonal gardens that have revitalized the neighborhood. This green corridor has reconnected downtown Boston with its waterfront, spurring economic development and creating a vibrant community space that draws both residents and visitors.
+      </p>
+    </div>
+
+    <div class="instructions">
+      Drag the slider left or right to compare Boston before and after the Big Dig
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-button">Previous</button>
+      <button class="nav-button">Next</button>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript remains the same as before
+    const slider = document.querySelector('.slider');
+    const beforeImage = document.querySelector('.before-image');
+    const beforeContext = document.getElementById('beforeContext');
+    const afterContext = document.getElementById('afterContext');
+    let isDragging = false;
+
+    const getPosition = (event) => {
+      const rect = slider.parentElement.getBoundingClientRect();
+      const x = event.type.includes('touch') 
+        ? event.touches[0].clientX - rect.left 
+        : event.clientX - rect.left;
+      return Math.min(Math.max(x, 0), rect.width);
+    };
+
+    const updateContext = (percentage) => {
+      if (percentage <= 15) {
+        beforeContext.style.display = 'none';
+        afterContext.style.display = 'block';
+      } else if (percentage >= 85) {
+        beforeContext.style.display = 'block';
+        afterContext.style.display = 'none';
+      }
+    };
+
+    const move = (event) => {
+      if (!isDragging) return;
+      event.preventDefault();
+      
+      const position = getPosition(event);
+      const percentage = (position / slider.parentElement.offsetWidth) * 100;
+      
+      slider.style.left = `${percentage}%`;
+      beforeImage.style.clipPath = `polygon(0 0, ${percentage}% 0, ${percentage}% 100%, 0 100%)`;
+      
+      updateContext(percentage);
+    };
+
+    slider.addEventListener('mousedown', () => isDragging = true);
+    slider.addEventListener('touchstart', () => isDragging = true);
+
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', move);
+
+    window.addEventListener('mouseup', () => isDragging = false);
+    window.addEventListener('touchend', () => isDragging = false);
+  </script>
+</body>
+</html>
